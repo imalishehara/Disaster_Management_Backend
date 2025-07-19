@@ -1,4 +1,4 @@
-﻿using Disaster_demo.Models;
+using Disaster_demo.Models;
 using Disaster_demo.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Disaster_demo.Services;
@@ -28,17 +28,31 @@ namespace Disaster_demo.Services
         //    return pending;
         //}
 
-        public async Task<List<AidRequests>> getPendingAidRequests(string divisionalSecretariat)
+        public async Task<List<AidRequests>> GetPendingPostDisasterAidRequestsAsync(string divisionalSecretariat)
         {
             divisionalSecretariat = divisionalSecretariat.Trim();
 
             var pending = await _dbContext.AidRequests
-                .Where(s => s.dsApprove == DsApprovalStatus.Pending && s.divisional_secretariat == divisionalSecretariat)
+                .Where(s => s.dsApprove == DsApprovalStatus.Pending
+                            && s.request_type == AidRequestType.PostDisaster
+                            && s.divisional_secretariat == divisionalSecretariat)
                 .OrderByDescending(s => s.date_time)
                 .ToListAsync();
 
             return pending;
         }
+
+
+        public async Task<List<AidRequests>> GetPendingEmergencyAidRequestsAsync()
+        {
+            var pendingEmergency = await _dbContext.AidRequests
+                .Where(s => s.request_type == AidRequestType.Emergency)
+                .OrderByDescending(s => s.date_time)
+                .ToListAsync();
+
+            return pendingEmergency;
+        }
+
 
 
 
@@ -100,6 +114,16 @@ namespace Disaster_demo.Services
             //}
 
             return false;
+        }
+
+        public async Task<List<AidRequests>> GetDsApprovedAidRequests()
+        {
+            var approvedRequests = await _dbContext.AidRequests
+                .Where(a => a.dsApprove == DsApprovalStatus.Approved)
+                .OrderByDescending(a => a.date_time)
+                .ToListAsync();
+
+            return approvedRequests;
         }
 
 
