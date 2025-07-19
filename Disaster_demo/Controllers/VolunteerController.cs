@@ -1,4 +1,4 @@
-﻿using Disaster_demo.Models.Entities;
+using Disaster_demo.Models.Entities;
 using Disaster_demo.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
@@ -18,16 +18,7 @@ namespace Disaster_demo.Controllers
         }
 
 
-        //[HttpPost("signup")]
-        //public async Task<IActionResult> Signup([FromBody] VolunteerSignupDTO dto)
-        //{
-        //    var result = await _volunteerServices.SignupAsync(dto);
-
-        //    if (result == "Email already registered.")
-        //        return BadRequest(result);
-
-        //    return Ok(result);
-        //}
+       
 
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] VolunteerSignupDTO dto)
@@ -40,16 +31,7 @@ namespace Disaster_demo.Controllers
             return Ok(new { userId });  // Return JSON object with userId
         }
 
-        //[HttpGet("all")]
-        //public async Task<IActionResult> GetAllVolunteers()
-        //{
-        //    var volunteers = await _volunteerServices.GetAllVolunteersAsync();
-
-        //    if (volunteers == null || !volunteers.Any())
-        //        return NotFound("No volunteers found.");
-
-        //    return Ok(volunteers);
-        //}
+        
 
         [HttpGet("by-division")]
         public async Task<IActionResult> GetVolunteersByDivision([FromQuery] string divisionalSecretariat)
@@ -103,6 +85,14 @@ namespace Disaster_demo.Controllers
 
             return Ok("Availability updated successfully.");
         }
+
+        [HttpGet("emergency-support")]
+        public async Task<IActionResult> GetEmergencyAidRequests() =>
+    Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
+
+        [HttpGet("non-emergency-support")]
+        public async Task<IActionResult> GetNonEmergencyAidRequests() =>
+            Ok(await _volunteerServices.GetNonEmergencyAidRequestsAsync());
 
 
 
