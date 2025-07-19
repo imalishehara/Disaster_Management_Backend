@@ -1,7 +1,8 @@
-﻿using Disaster_demo.Models;
+using Disaster_demo.Models;
 using Disaster_demo.Models.Entities;
-using Microsoft.EntityFrameworkCore;
 using Disaster_demo.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
 namespace Disaster_demo.Services
@@ -15,31 +16,7 @@ namespace Disaster_demo.Services
             this._dbContext = dbContext;
         }
 
-        //public async Task<string> SignupAsync(VolunteerSignupDTO dto)
-        //{
-        //    if (_dbContext.Users.Any(u => u.email == dto.Email))
-        //    {
-        //        return "Email already registered.";
-        //    }
 
-        //    // No need to parse the enum since the DTO already uses the correct type
-        //    var volunteer = new Volunteer
-        //    {
-        //        email = dto.Email,
-        //        password = dto.Password,
-        //        role = UserRole.volunteer,
-        //        status = UserStatus.active,
-        //        name = dto.Name,
-        //        district = dto.District,
-        //        gn_division = dto.GnDivision,
-        //        availability = AvailabilityStatus.Unavailable // Use the enum value directly
-        //    };
-
-        //    _dbContext.Volunteers.Add(volunteer);
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return "Signup successful.";
-        //}
 
 
         public async Task<int> SignupAsync(VolunteerSignupDTO dto)
@@ -70,11 +47,6 @@ namespace Disaster_demo.Services
 
 
 
-        //public async Task<List<Volunteer>> GetAllVolunteersAsync()
-        //{
-        //    return await _dbContext.Volunteers.ToListAsync();
-        //}
-
         public async Task<List<Volunteer>> GetVolunteersByDsDivisionAsync(string divisionalSecretariat)
         {
             return await _dbContext.Volunteers
@@ -100,7 +72,7 @@ namespace Disaster_demo.Services
                 DivisionalSecretariat = volunteer.divisional_secretariat,
                 Role = "Volunteer",
                 Message = "Volunteer details fetched successfully",
-                ContactNo=volunteer.email,
+                ContactNo = volunteer.email,
                 District = volunteer.district,
                 Availability = volunteer.availability
             };
@@ -122,6 +94,24 @@ namespace Disaster_demo.Services
             volunteer.availability = newStatus;
             await _dbContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync()
+        {
+            return await _dbContext.AidRequests
+                .Where(r => r.dsApprove == DsApprovalStatus.Approved
+                            && r.request_type == AidRequestType.Emergency)
+                .ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsAsync()
+        {
+            return await _dbContext.AidRequests
+                .Where(r => r.dsApprove == DsApprovalStatus.Approved
+                            && r.request_type == AidRequestType.PostDisaster
+                            && !r.IsFulfilled)
+                .ToListAsync();
         }
 
 
