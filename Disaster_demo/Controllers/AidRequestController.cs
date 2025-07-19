@@ -1,4 +1,4 @@
-﻿using Disaster_demo.Models.Entities;
+using Disaster_demo.Models.Entities;
 using Disaster_demo.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
@@ -43,18 +43,24 @@ namespace Disaster_demo.Controllers
         //    return Ok(result);
         //}
 
-        [HttpGet("pending")]
-        public async Task<IActionResult> GetPendingAidRequests([FromQuery] string divisionalSecretariat)
+        [HttpGet("pending-post-disaster")]
+        public async Task<IActionResult> GetPendingPostDisasterAidRequests([FromQuery] string divisionalSecretariat)
         {
-            if (string.IsNullOrEmpty(divisionalSecretariat))
+            if (string.IsNullOrWhiteSpace(divisionalSecretariat))
             {
                 return BadRequest("Divisional Secretariat is required.");
             }
 
-            var result = await _aidrequestServices.getPendingAidRequests(divisionalSecretariat);
+            var result = await _aidrequestServices.GetPendingPostDisasterAidRequestsAsync(divisionalSecretariat);
             return Ok(result);
         }
 
+        [HttpGet("pending-emergency")]
+        public async Task<IActionResult> GetPendingEmergencyAidRequests()
+        {
+            var result = await _aidrequestServices.GetPendingEmergencyAidRequestsAsync();
+            return Ok(result);
+        }
 
 
 
@@ -68,6 +74,14 @@ namespace Disaster_demo.Controllers
 
             return Ok(new { message = "Status updated successfully." });
         }
+
+        [HttpGet("ds-approved")]
+        public async Task<IActionResult> GetDsApprovedAidRequests()
+        {
+            var result = await _aidrequestServices.GetDsApprovedAidRequests();
+            return Ok(result);
+        }
+
 
         //[HttpGet("byDistrict/{district}")]
         //public async Task<IActionResult> GetAidRequestsByDistrict(string district)
