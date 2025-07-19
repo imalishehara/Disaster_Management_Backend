@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -31,6 +31,7 @@ namespace Disaster_demo.Models.Entities
         public AidRequestType request_type { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
+        public bool IsFulfilled { get; set; } = false;
     }
 }
 
