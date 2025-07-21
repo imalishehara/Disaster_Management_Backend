@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Disaster_demo.Models.Entities
 {
@@ -14,5 +14,7 @@ namespace Disaster_demo.Models.Entities
         public AlertStatus status { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
+        public string reporter_contact { get; set; }
+
     }
 }
