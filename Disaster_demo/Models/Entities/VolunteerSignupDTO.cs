@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Disaster_demo.Models.Entities
 {
@@ -7,6 +7,10 @@ namespace Disaster_demo.Models.Entities
         public string Name { get; set; }
         public string District { get; set; }
         public string DivisionalSecretariat { get; set; }
+
+        [Required(ErrorMessage = "Contact number is required")]
+        [Phone(ErrorMessage = "Please enter a valid phone number")]
+        public string ContactNumber { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address")]
