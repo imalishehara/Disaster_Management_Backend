@@ -88,7 +88,7 @@ namespace Disaster_demo.Controllers
 
         [HttpGet("emergency-support")]
         public async Task<IActionResult> GetEmergencyAidRequests() =>
-    Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
+        Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
 
         [HttpGet("non-emergency-support")]
         public async Task<IActionResult> GetNonEmergencyAidRequests() =>
