@@ -35,6 +35,7 @@ namespace Disaster_demo.Services
                 name = dto.Name,
                 district = dto.District,
                 divisional_secretariat = dto.DivisionalSecretariat,
+                contact_number = dto.ContactNumber,
                 availability = AvailabilityStatus.Unavailable
             };
 
@@ -72,7 +73,8 @@ namespace Disaster_demo.Services
                 DivisionalSecretariat = volunteer.divisional_secretariat,
                 Role = "Volunteer",
                 Message = "Volunteer details fetched successfully",
-                ContactNo = volunteer.email,
+                ContactNo = volunteer.contact_number,
+                Email = volunteer.email,
                 District = volunteer.district,
                 Availability = volunteer.availability
             };
@@ -99,8 +101,7 @@ namespace Disaster_demo.Services
         public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync()
         {
             return await _dbContext.AidRequests
-                .Where(r => r.dsApprove == DsApprovalStatus.Approved
-                            && r.request_type == AidRequestType.Emergency)
+                .Where(r => r.request_type == AidRequestType.Emergency)
                 .ToListAsync();
         }
 
