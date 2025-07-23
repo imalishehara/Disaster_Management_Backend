@@ -14,6 +14,7 @@ namespace Disaster_demo.Services
             _dbContext = context;
         }
 
+
         public async Task<bool> AddContributionAsync(ContributionDTO dto)
         {
             var contribution = new Contribution
@@ -23,7 +24,8 @@ namespace Disaster_demo.Services
                 district = dto.district,
                 image = dto.image,
                 type_support = dto.type_support,
-                description = dto.description
+                description = dto.description,
+                status = "Pending"
             };
 
             _dbContext.Contribution.Add(contribution);
@@ -33,10 +35,30 @@ namespace Disaster_demo.Services
         public async Task<List<Contribution>> GetContributionsByVolunteerIdAsync(int volunteerId)
         {
             return await _dbContext.Contribution
-                .Where(c => c.volunteer_id == volunteerId)
+                .Where(c => c.volunteer_id == volunteerId && c.status == "Approved")
                 .OrderByDescending(c => c.created_at)
                 .ToListAsync();
         }
+
+
+        //public async Task<List<Contribution>> GetContributionsByVolunteerIdAsync(int volunteerId)
+        //{
+        //    return await _dbContext.Contribution
+        //        .Where(c => c.volunteer_id == volunteerId && c.status == "Approved")
+        //        .Join(
+        //            _dbContext.AidRequests,
+        //            contribution => contribution.aid_id,
+        //            aidRequest => aidRequest.aid_id,
+        //            (contribution, aidRequest) => new { contribution, aidRequest }
+        //        )
+        //        .Where(joined => joined.aidRequest.dsApprove == DsApprovalStatus.Approved)
+        //        .OrderByDescending(joined => joined.contribution.created_at)
+        //        .Select(joined => joined.contribution)
+        //        .ToListAsync();
+        //}
+
+
+
 
         public async Task<List<Contribution>> GetContributionsByAidIdAsync(int aidId)
         {
@@ -140,16 +162,31 @@ namespace Disaster_demo.Services
 
 
 
+        //public async Task<int> GetTotalContributionsCountAsync(int volunteerId)
+        //{
+        //    return await _dbContext.Contribution
+        //        .CountAsync(c => c.volunteer_id == volunteerId);
+        //}
+
+        //public async Task<Contribution> GetLatestContributionAsync(int volunteerId)
+        //{
+        //    return await _dbContext.Contribution
+        //        .Where(c => c.volunteer_id == volunteerId)
+        //        .OrderByDescending(c => c.created_at)
+        //        .FirstOrDefaultAsync();
+        //}
+
+
         public async Task<int> GetTotalContributionsCountAsync(int volunteerId)
         {
             return await _dbContext.Contribution
-                .CountAsync(c => c.volunteer_id == volunteerId);
+                .CountAsync(c => c.volunteer_id == volunteerId && c.status == "Approved");
         }
 
         public async Task<Contribution> GetLatestContributionAsync(int volunteerId)
         {
             return await _dbContext.Contribution
-                .Where(c => c.volunteer_id == volunteerId)
+                .Where(c => c.volunteer_id == volunteerId && c.status == "Approved")
                 .OrderByDescending(c => c.created_at)
                 .FirstOrDefaultAsync();
         }
