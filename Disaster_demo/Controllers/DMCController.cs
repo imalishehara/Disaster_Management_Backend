@@ -1,4 +1,4 @@
-﻿using Disaster_demo.Services;
+using Disaster_demo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Disaster_demo.Controllers
